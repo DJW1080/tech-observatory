@@ -23,4 +23,4 @@ This work is dedicated to the public domain under the **Creative Commons CC0 1.0
 
 ---
 
-### _Last updated: 24-02-2026_
+### _Last updated: 07-03-2026_
