@@ -1,0 +1,29 @@
+name: directory-listing
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  pages-directory-listing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate directory listings
+        uses: jayanta525/github-pages-directory-listing@v4.0.0
+        with:
+          FOLDER: docx-reports   # folder you want indexed
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docx-reports'
+
+  deploy:
+    needs: pages-directory-listing
+    permissions:
+      pages: write
+      id-token: write
+    uses: actions/deploy-pages@v4
+    
