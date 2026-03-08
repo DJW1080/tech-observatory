@@ -1,0 +1,26 @@
+name: Build Tech Observatory
+description: Generate static GitHub Pages files for Tech Observatory
+
+inputs:
+  data_dir:
+    description: Root content directory
+    required: false
+    default: data
+
+  site_title:
+    description: Site title
+    required: false
+    default: Tech Observatory
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Build site
+      shell: bash
+      run: |
+        python scripts/build_pages.py "${{ inputs.data_dir }}" "${{ inputs.site_title }}"
