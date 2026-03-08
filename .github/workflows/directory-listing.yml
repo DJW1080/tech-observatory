@@ -4,7 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'data/**'
+      - '.github/workflows/directory-listing.yml'
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pages-directory-listing:
@@ -19,6 +29,14 @@ jobs:
         uses: jayanta525/github-pages-directory-listing@v4.0.0
         with:
           FOLDER: data
+
+      - name: Restore custom homepage
+        run: |
+          if [ ! -f "data/index.custom.html" ]; then
+            echo "Missing data/index.custom.html"
+            exit 1
+          fi
+          cp data/index.custom.html data/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

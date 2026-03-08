@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tech Observatory</title>
+  <meta name="description" content="Tech Observatory document archive for research reports and technical documentation.">
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Tech Observatory</h1>
+      <p class="intro">
+        A document archive for research reports and technical documentation.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Research Reports</h2>
+      <p class="section-text">
+        Reports, investigations, and longer-form research material.
+      </p>
+      <ul id="research-list" class="document-list">
+        <li class="loading">Loading documents...</li>
+      </ul>
+      <p class="browse-link">
+        <a href="./research-reports/">Browse research-reports folder</a>
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Technical Documentation</h2>
+      <p class="section-text">
+        Technical notes, reference material, and implementation documentation.
+      </p>
+      <ul id="technical-list" class="document-list">
+        <li class="loading">Loading documents...</li>
+      </ul>
+      <p class="browse-link">
+        <a href="./technical-documentation/">Browse technical-documentation folder</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Published with GitHub Pages.</p>
+    </div>
+  </footer>
+
+  <script>
+    async function populateDocumentList(folderPath, listId) {
+      const list = document.getElementById(listId);
+
+      try {
+        const response = await fetch(folderPath + 'index.html', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error('Could not load folder index: ' + folderPath);
+        }
+
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const links = Array.from(doc.querySelectorAll('a'));
+
+        const files = links
+          .map(link => ({
+            href: link.getAttribute('href') || '',
+            text: (link.textContent || '').trim()
+          }))
+          .filter(file => {
+            const href = file.href.toLowerCase();
+            const text = file.text.toLowerCase();
+
+            if (!href || href === '../' || href === './' || href === '/') {
+              return false;
+            }
+
+            if (text === 'parent directory' || text === '..') {
+              return false;
+            }
+
+            return href.endsWith('.docx');
+          })
+          .sort((a, b) => a.text.localeCompare(b.text));
+
+        list.innerHTML = '';
+
+        if (files.length === 0) {
+          const li = document.createElement('li');
+          li.className = 'empty';
+          li.textContent = 'No documents found in this section yet.';
+          list.appendChild(li);
+          return;
+        }
+
+        for (const file of files) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+
+          a.href = new URL(file.href, folderPath).href;
+          a.textContent = file.text;
+          a.setAttribute('download', '');
+
+          li.appendChild(a);
+          list.appendChild(li);
+        }
+      } catch (error) {
+        list.innerHTML = '';
+        const li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = 'Unable to load this section right now.';
+        list.appendChild(li);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      populateDocumentList('./research-reports/', 'research-list');
+      populateDocumentList('./technical-documentation/', 'technical-list');
+    });
+  </script>
+</body>
+</html>
