@@ -1,0 +1,15 @@
+{
+  "site_title": "Tech Observatory",
+  "site_subtitle": "Research reports and technical documentation.",
+  "footer_text": "Technification · Tech Observatory",
+  "sections": {
+    "research-reports": {
+      "title": "Research Reports",
+      "description": "Reports, investigations, and longer-form research material."
+    },
+    "technical-documentation": {
+      "title": "Technical Documentation",
+      "description": "Technical notes, reference material, and implementation documentation."
+    }
+  }
+}

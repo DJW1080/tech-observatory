@@ -1,10 +1,13 @@
-# Tech Observatory
+# 👨‍🔬 Tech Observatory
 
-## Observing patterns in systems, code, and culture
+## 👨‍💻 Observing patterns in systems, code, and culture
 
-## 📝 Credits
+Website: [Tech Observatory](https://djw1080.github.io/tech-observatory/)
 
-Created by **Dean John Weiniger**  
+## 📝 Author
+
+Authored by **Dean John Weiniger**.  
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0003--4733--1421-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0003-4733-1421)
 
 ## 📜 Licence
 
