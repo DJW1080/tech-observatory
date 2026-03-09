@@ -2,7 +2,44 @@
 
 ## 👨‍💻 Observing patterns in systems, code, and culture
 
-Website: [Tech Observatory](https://djw1080.github.io/tech-observatory/)
+[*Tech Observatory*](https://djw1080.github.io/tech-observatory/) is an open library of independent research projects examining technology, systems behaviour, digital infrastructure, and real‑world technical phenomena. Each project is self contained, fully documented, and published for public access. The aim is to provide a transparent, structured archive of research.
+
+## 🌐 About
+
+The website is generated automatically using GitHub Pages.  
+A simple interface for browsing the Tech Observatory Research Library.  
+
+View the repository here:
+[djw1080.github.io/tech-observatory](https://djw1080.github.io/tech-observatory/)
+
+## 🎯 Purpose
+
+- Preserve research in an accessible format.  
+- Transparency through evidence and artefacts.  
+- Long‑term archiving of independent research.  
+- Structured, navigable library for readers.
+
+## 📂 Repository Structure
+
+```text
+tech-observatory/
+├── .github/
+│   ├── actions/
+│   │   └── build-tech-observatory/
+│   │       └── action.yml          Defines the local GitHub Action.
+│   └── workflows/
+│       └── pages.yml               Deploys to GitHub Pages.
+├── script
+│   └── build_pages.py              Python Script - Builds HTML.
+├── data/
+│   ├── site.json                   Configuration Settings.
+│   ├── assets/
+│   │   └── css/
+│   │       └── style.css           Cascading Style Sheet - Styles HTML.
+│   ├── research-reports/           Stores Research Documents.
+│   └── technical-documentation/    Stores Technical Documents.
+└── README.md
+```
 
 ## 📝 Author
 
@@ -26,4 +63,4 @@ This work is dedicated to the public domain under the **Creative Commons CC0 1.0
 
 ---
 
-### _Last updated: 07-03-2026_
+### *updated: 10-03-2026*
