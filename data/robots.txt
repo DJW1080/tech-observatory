@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://djw1080.github.io/tech-observatory/sitemap.xml

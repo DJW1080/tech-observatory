@@ -285,7 +285,7 @@ def make_item(path: Path, entry: dict | None = None) -> dict:
         "date_iso": date_value,
         "date_display": format_date(date_value),
         "abstract": read_abstract(path, entry, metadata),
-        "file_label": "PDF file",
+        "file_label": "PDF",
     }
 
 
@@ -318,6 +318,7 @@ def load_site_config(data_dir: Path, fallback_title: str) -> dict:
             "site_icon": "🔭",
             "site_subtitle": "Observing the systems that shape our digital life.",
             "meta_description": "Observing the systems that shape our digital life.",
+            "site_url": "https://djw1080.github.io/tech-observatory",
             "footer_text": "Technification · Tech Observatory",
             "latest_updates_count": 5,
             "sections": {},
@@ -334,11 +335,71 @@ def load_site_config(data_dir: Path, fallback_title: str) -> dict:
         "site_icon": data.get("site_icon", "🔭"),
         "site_subtitle": site_subtitle,
         "meta_description": data.get("meta_description", site_subtitle),
+        "site_url": str(data.get("site_url", "")).rstrip("/"),
         "footer_text": data.get("footer_text", "Technification · Tech Observatory"),
         "latest_updates_count": int(data.get("latest_updates_count", 5) or 5),
         "sections": data.get("sections", {}),
     }
 
+def xml_escape(value: str) -> str:
+    return (
+        str(value)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+        .replace("'", "&apos;")
+    )
+
+
+def render_robots_txt(site_url: str) -> str:
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+    ]
+
+    if site_url:
+        lines.append(f"Sitemap: {site_url}/sitemap.xml")
+
+    return "\n".join(lines) + "\n"
+
+
+def render_sitemap_xml(site_url: str, sections: list[dict]) -> str:
+    if not site_url:
+        return ""
+
+    urls: list[tuple[str, str | None]] = []
+
+    urls.append((f"{site_url}/", None))
+
+    for section in sections:
+        section_latest = None
+        dated_items = [item for item in section["items"] if item.get("date_iso")]
+        if dated_items:
+            section_latest = max(item["date_iso"] for item in dated_items)
+
+        urls.append((f"{site_url}/{section['folder']}/", section_latest))
+
+        for item in section["items"]:
+            pdf_url = f"{site_url}/{section['folder']}/{quote(item['file'])}"
+            urls.append((pdf_url, item.get("date_iso")))
+
+    parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+    ]
+
+    for loc, lastmod in urls:
+        parts.append("  <url>")
+        parts.append(f"    <loc>{xml_escape(loc)}</loc>")
+        if lastmod:
+            parts.append(f"    <lastmod>{xml_escape(lastmod)}</lastmod>")
+        parts.append("  </url>")
+
+    parts.append("</urlset>")
+    parts.append("")
+
+    return "\n".join(parts)
 
 def build_section(section_defaults: dict, config_sections: dict, data_dir: Path) -> dict:
     folder = section_defaults["folder"]
@@ -425,7 +486,7 @@ def render_doc_list(items: list[dict], base_href: str) -> str:
         href = make_href(base_href, item["file"])
         title = html.escape(item["title"])
         filename = html.escape(item["file"])
-        file_label = html.escape(item.get("file_label", "PDF file"))
+        file_label = html.escape(item.get("file_label", "PDF"))
 
         meta_line = ""
         if item["date_display"]:
@@ -472,15 +533,20 @@ def render_home_page(
         date_display = html.escape(item["date_display"])
         section_label = html.escape(section["title"])
         latest_html.append(
-            f'<li><a href="{href}">{title}</a> <span class="latest-meta">— {date_display} · {section_label}</span></li>'
+            f'''<li class="latest-item">
+            <div class="latest-title-row">
+            <a href="{href}" class="latest-link">{title}</a>
+            <span class="file-badge file-badge-inline">PDF</span>
+            </div>
+            <div class="latest-meta">{date_display} · {section_label}</div>
+            </li>'''
         )
-
     latest_updates_block = "\n        ".join(latest_html) if latest_html else "<li>No recent updates.</li>"
 
     last_updated_html = ""
     if all_docs:
         last_updated_display = all_docs[0][2].get("date_display") or all_docs[0][0]
-        last_updated_html = f'\n      <p class="last-updated">Last updated: {html.escape(last_updated_display)}</p>'
+        last_updated_html = f'<span class="last-updated-inline">Last website update: {html.escape(last_updated_display)}</span>'
 
     section_html: list[str] = []
     for section in sections:
@@ -534,13 +600,14 @@ def render_home_page(
   <main class="container">
     <section class="card">
       <div class="section-heading">
-        <div>
-          <h2>Latest Updates</h2>
+        <div class="latest-heading-block">
+         <h2>Latest Updates</h2>
+         {last_updated_html}
         </div>
       </div>
       <ul class="document-list latest-list">
-        {latest_updates_block}
-      </ul>{last_updated_html}
+       {latest_updates_block}
+      </ul>
     </section>
 
 {joined_sections}
@@ -634,6 +701,7 @@ def main() -> int:
     meta_description = config["meta_description"]
     footer_text = config["footer_text"]
     latest_updates_count = config["latest_updates_count"]
+    site_url = config["site_url"]
 
     sections = [build_section(default, config["sections"], data_dir) for default in DEFAULT_SECTIONS]
 
@@ -655,6 +723,12 @@ def main() -> int:
             section["path"] / "index.html",
             render_section_page(site_title, site_subtitle, footer_text, sections, section),
         )
+
+    write_text(data_dir / "robots.txt", render_robots_txt(site_url))
+
+    sitemap_xml = render_sitemap_xml(site_url, sections)
+    if sitemap_xml:
+        write_text(data_dir / "sitemap.xml", sitemap_xml)
 
     write_text(data_dir / ".nojekyll", "")
 
