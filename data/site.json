@@ -1,15 +1,22 @@
 {
   "site_title": "Tech Observatory",
-  "site_subtitle": "Tech Observatory documents the hidden systems shaping our digital life, through independent research, technical analysis, and public‑interest reporting.",
+  "site_icon": "🔭",
+  "site_subtitle": "Observing the systems that shape our digital life.",
+  "meta_description": "Observing the systems that shape our digital life.",
   "footer_text": "Technification · Tech Observatory",
+  "latest_updates_count": 5,
   "sections": {
     "research-reports": {
       "title": "Research Reports",
-      "description": "Researched Reports and investigations."
+      "description": "Independent research and investigations.",
+      "icon": "🔬",
+      "sort": "date_desc"
     },
     "technical-documentation": {
       "title": "Technical Documentation",
-      "description": "Technical Documentation, Instruction Manuals, and Specifications."
+      "description": "Technical notes, guides, and reference material.",
+      "icon": "🕹️",
+      "sort": "date_desc"
     }
   }
 }
