@@ -308,7 +308,7 @@ def render_home_page(site_title: str, site_subtitle: str, footer_text: str, sect
           <h2>Latest Updates</h2>
         </div>
       </div>
-      <ul>
+      <ul class="document-list">
         {latest_updates_block}
         {last_updated_html}
       </ul>
@@ -375,9 +375,6 @@ def render_section_page(site_title: str, site_subtitle: str, footer_text: str, s
       <ul class="document-list">
 {render_doc_list(section["items"], ".")}
       </ul>
-      <p class="browse-link">
-        <a href="../index.html">Back to home</a>
-      </p>
     </section>
   </main>
 
