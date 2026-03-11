@@ -1,0 +1,2 @@
+Profit vs Progress:
+This report argues that technology is often held back less by technical limits and more by corporate incentives, legal systems, vendor lock-in, and human resistance to change. It contrasts proprietary control with open-source flexibility and concludes that open standards, procurement reform, and cultural change are needed to reduce institutional barriers to innovation.

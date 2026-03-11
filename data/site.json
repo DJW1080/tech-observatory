@@ -1,15 +1,15 @@
 {
   "site_title": "Tech Observatory",
-  "site_subtitle": "Research reports and technical documentation.",
+  "site_subtitle": "Tech Observatory documents the hidden systems shaping our digital life, through independent research, technical analysis, and public‑interest reporting.",
   "footer_text": "Technification · Tech Observatory",
   "sections": {
     "research-reports": {
       "title": "Research Reports",
-      "description": "Reports, investigations, and longer-form research material."
+      "description": "Researched Reports and investigations."
     },
     "technical-documentation": {
       "title": "Technical Documentation",
-      "description": "Technical notes, reference material, and implementation documentation."
+      "description": "Technical Documentation, Instruction Manuals, and Specifications."
     }
   }
 }

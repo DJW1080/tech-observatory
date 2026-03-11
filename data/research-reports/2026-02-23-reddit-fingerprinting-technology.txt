@@ -1,0 +1,2 @@
+Reddit’s Fingerprinting Technology:
+This report explains how Reddit can combine device data, network signals, and behavioural patterns to identify users and detect ban evasion. It warns that such systems can cause false bans, account linkage, privacy harms, and misattribution, especially as AI and spoofing tools improve, and it calls for stronger safeguards, transparency, and user redress.

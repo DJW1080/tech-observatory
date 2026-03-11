@@ -1,0 +1,1 @@
+Build a GitHub repo where you simply drop .docx files into a folder and GitHub Pages automatically publishes a clean, browsable list of download links.
